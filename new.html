@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Cartoon Vhanel</title>
+    <style>
+        :root {
+            --bg: #fdf4ff;
+            --surface: #ffffff;
+            --text: #212121;
+            --muted: #6f5b92;
+            --primary: #ff6cc9;
+            --secondary: #4a6dfc;
+            --accent: #ffd35b;
+            --shadow: 0 24px 60px rgba(55, 13, 114, 0.12);
+            --radius: 28px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: radial-gradient(circle at top left, rgba(255, 108, 201, 0.2), transparent 30%),
+                radial-gradient(circle at right, rgba(74, 109, 252, 0.15), transparent 25%),
+                var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .page-sparkles {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.7) 1px, transparent 1px);
+            background-size: 80px 80px;
+            opacity: 0.35;
+            z-index: 0;
+        }
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            padding: 1rem 2rem;
+            background: rgba(253, 244, 255, 0.92);
+            backdrop-filter: blur(14px);
+            border-bottom: 1px solid rgba(145, 116, 190, 0.14);
+        }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.85rem;
+            font-weight: 800;
+            font-size: 1.1rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--secondary);
+        }
+
+        .brand-mark {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 2.3rem;
+            height: 2.3rem;
+            border-radius: 16px;
+            background: linear-gradient(135deg, #ff6cc9, #4a6dfc);
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        nav {
+            display: flex;
+            gap: 1.15rem;
+            flex-wrap: wrap;
+        }
+
+        nav a {
+            color: var(--muted);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .theme-toggle {
+            border: 0;
+            padding: 0.75rem 1rem;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text);
+            box-shadow: 0 14px 40px rgba(111, 91, 146, 0.14);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .theme-toggle:hover {
+            transform: translateY(-2px);
+        }
+
+        main {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            padding: 3rem 2rem 2rem;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .hero-copy {
+            max-width: 620px;
+        }
+
+        .eyebadge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 108, 201, 0.1);
+            color: var(--primary);
+            padding: 0.65rem 0.9rem;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .hero h1 {
+            margin: 1.5rem 0 1rem;
+            font-size: clamp(2.8rem, 5vw, 4.2rem);
+            line-height: 0.95;
+            letter-spacing: -0.05em;
+        }
+
+        .hero p {
+            max-width: 36rem;
+            font-size: 1rem;
+            color: #4c426e;
+            margin-bottom: 1.8rem;
+        }
+
+        .hero-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 1.6rem;
+            border-radius: 999px;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            box-shadow: 0 18px 35px rgba(255, 108, 201, 0.28);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.9);
+            color: var(--text);
+            box-shadow: 0 16px 32px rgba(111, 91, 146, 0.12);
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .stat {
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(168, 140, 213, 0.18);
+            border-radius: 22px;
+            padding: 1rem 1.15rem;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(73, 62, 122, 0.08);
+        }
+
+        .stat strong {
+            display: block;
+            font-size: 1.35rem;
+            color: var(--text);
+        }
+
+        .stat span {
+            display: block;
+            margin-top: 0.35rem;
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .hero-card {
+            position: relative;
+            min-height: 520px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(255,255,255,0.7));
+            border-radius: 42px;
+            padding: 2rem;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-shape {
+            position: absolute;
+            border-radius: 999px;
+            opacity: 0.85;
+            filter: blur(14px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .hero-shape:nth-child(1) { width: 180px; height: 180px; background: #ff6cc9; top: 15%; left: 10%; animation-delay: 0s; }
+        .hero-shape:nth-child(2) { width: 130px; height: 130px; background: #4a6dfc; top: 20%; right: 10%; animation-delay: 1s; }
+        .hero-shape:nth-child(3) { width: 240px; height: 240px; background: #ffd35b; top: 50%; left: 55%; animation-delay: 2s; }
+
+        .hero-scene {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 32px;
+            overflow: hidden;
+            background: linear-gradient(180deg, #d2f1ff 0%, #f6e8ff 100%);
+            border: 2px solid rgba(255,255,255,0.9);
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.5);
+        }
+
+        .character {
+            position: absolute;
+            width: 170px;
+            height: 170px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 6px solid rgba(74, 109, 252, 0.22);
+            display: grid;
+            place-items: center;
+            text-align: center;
+            padding: 1rem;
+            box-shadow: 0 28px 40px rgba(82, 70, 148, 0.15);
+            animation: bounce 4s ease-in-out infinite;
+        }
+
+        .character:nth-child(1) { top: 1.5rem; left: 2rem; transform: rotate(-8deg); animation-delay: 0s; }
+        .character:nth-child(2) { top: 4rem; right: 2rem; transform: rotate(6deg); animation-delay: 0.4s; }
+        .character:nth-child(3) { bottom: 2.5rem; left: 20%; transform: rotate(4deg); animation-delay: 0.8s; }
+
+        .character .face {
+            font-size: 3.35rem;
+        }
+
+        .character strong {
+            display: block;
+            margin-top: 0.85rem;
+            font-size: 1rem;
+            letter-spacing: 0.02em;
+            color: var(--secondary);
+        }
+
+        .character--star {
+            background: linear-gradient(135deg, #fff3d9, #ffe0a3);
+        }
+
+        .character--robot {
+            background: linear-gradient(135deg, #e8f2ff, #d8e9ff);
+        }
+
+        .character--cat {
+            background: linear-gradient(135deg, #ffe8ff, #ffd5f0);
+        }
+
+        .panel {
+            padding: 3rem 2rem;
+        }
+
+        .panel h2 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            margin-bottom: 0.8rem;
+        }
+
+        .panel p {
+            max-width: 54rem;
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .world-grid,
+        .feature-grid,
+        .character-grid {
+            display: grid;
+            gap: 1.25rem;
+        }
+
+        .world-grid {
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+        }
+
+        .world-btn {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(74, 109, 252, 0.14);
+            border-radius: 26px;
+            padding: 1.15rem 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+            color: var(--text);
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .world-btn:hover,
+        .world-btn.active {
+            transform: translateY(-2px);
+            border-color: rgba(255, 108, 201, 0.6);
+            box-shadow: 0 18px 35px rgba(255, 108, 201, 0.18);
+        }
+
+        .world-btn span {
+            display: block;
+            margin-top: 0.45rem;
+            color: var(--muted);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .feature-grid {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 32px;
+            padding: 1.6rem;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(141, 122, 220, 0.08);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 28px 54px rgba(84, 71, 150, 0.18);
+        }
+
+        .feature-card .icon {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-card h3 {
+            margin-bottom: 0.75rem;
+            font-size: 1.2rem;
+        }
+
+        .feature-card p {
+            color: var(--muted);
+        }
+
+        .character-grid {
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        }
+
+        .character-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), #f6f0ff);
+            border-radius: 32px;
+            padding: 1.5rem;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .character-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .character-card .portrait {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            margin: 0 auto 1rem;
+            display: grid;
+            place-items: center;
+            font-size: 3rem;
+            background: white;
+            border: 8px solid rgba(255, 108, 201, 0.16);
+            box-shadow: 0 18px 30px rgba(111, 91, 146, 0.12);
+        }
+
+        .character-card h3 {
+            margin-bottom: 0.45rem;
+        }
+
+        .character-card p {
+            color: var(--muted);
+            font-size: 0.98rem;
+        }
+
+        .cta {
+            margin: 0 2rem 2rem;
+            background: linear-gradient(135deg, rgba(255, 108, 201, 0.12), rgba(74, 109, 252, 0.12));
+            border-radius: 38px;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .cta h2 {
+            margin-bottom: 1rem;
+        }
+
+        .join-form {
+            display: inline-flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.85rem;
+            margin-top: 1.5rem;
+        }
+
+        .join-form input {
+            min-width: 240px;
+            flex: 1;
+            padding: 1rem 1.2rem;
+            border: 1px solid rgba(74, 109, 252, 0.16);
+            border-radius: 999px;
+            font-size: 1rem;
+        }
+
+        .join-form button {
+            min-width: 180px;
+            border: none;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border-radius: 999px;
+            padding: 1rem 1.5rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 9, 55, 0.6);
+            backdrop-filter: blur(4px);
+            align-items: center;
+            justify-content: center;
+            padding: 1.2rem;
+            z-index: 30;
+        }
+
+        .modal.open {
+            display: flex;
+        }
+
+        .modal-card {
+            width: min(540px, 100%);
+            background: white;
+            border-radius: 32px;
+            padding: 2rem;
+            box-shadow: var(--shadow);
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-card button {
+            margin-top: 1.5rem;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            width: 2.6rem;
+            height: 2.6rem;
+            border-radius: 50%;
+            border: none;
+            background: rgba(74, 109, 252, 0.08);
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        .theme-night {
+            --bg: #130f2f;
+            --surface: #1c163d;
+            --text: #f8f6ff;
+            --muted: #c7bef7;
+            --primary: #f44cff;
+            --secondary: #5b9bff;
+            --accent: #ffd75a;
+        }
+
+        .theme-night body {
+            background: radial-gradient(circle at top left, rgba(244, 76, 255, 0.18), transparent 30%),
+                radial-gradient(circle at right, rgba(91, 155, 255, 0.12), transparent 25%),
+                var(--bg);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-14px) scale(1.05); }
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-16px) rotate(1deg); }
+        }
+
+        @media (max-width: 940px) {
+            .hero { grid-template-columns: 1fr; }
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+            .world-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .feature-grid { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 700px) {
+            header { flex-direction: column; align-items: stretch; }
+            .hero { padding-top: 1.5rem; }
+            .hero-stats { grid-template-columns: 1fr; }
+            .hero-card { min-height: 420px; }
+            .world-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-sparkles"></div>
+    <header>
+        <div class="brand">
+            <span class="brand-mark">V</span>
+            Cartoon Vhanel
+        </div>
+        <nav>
+            <a href="#worlds">Worlds</a>
+            <a href="#shows">Shows</a>
+            <a href="#characters">Characters</a>
+            <a href="#join">Join</a>
+        </nav>
+        <button class="theme-toggle" id="themeToggle">Night mode</button>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-copy">
+                <div class="eyebadge">New season dropped</div>
+                <h1>Step into the Cartoon Vhanel Universe</h1>
+                <p>Discover wild animated worlds, silly heroes, and stories that move with color, music, and a pop of laughter.</p>
+
+                <div class="hero-actions">
+                    <button class="btn btn-primary" id="watchTrailer">Watch Trailer</button>
+                    <a href="#join" class="btn btn-secondary">Join the Crew</a>
+                </div>
+
+                <div class="hero-stats">
+                    <div class="stat">
+                        <strong>12+</strong>
+                        <span>Original episodes</span>
+                    </div>
+                    <div class="stat">
+                        <strong>5</strong>
+                        <span>Animated worlds</span>
+                    </div>
+                    <div class="stat">
+                        <strong>150K</strong>
+                        <span>Happy viewers</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-card">
+                <span class="hero-shape"></span>
+                <span class="hero-shape"></span>
+                <span class="hero-shape"></span>
+                <div class="hero-scene">
+                    <div class="character character--star">
+                        <div class="face">✨</div>
+                        <strong>Twinkle</strong>
+                    </div>
+                    <div class="character character--robot">
+                        <div class="face">🤖</div>
+                        <strong>Beep</strong>
+                    </div>
+                    <div class="character character--cat">
+                        <div class="face">😺</div>
+                        <strong>Poppy</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="worlds" class="panel">
+            <h2>Choose your animated world</h2>
+            <p>Tap a mood to change the channel and watch how the Vhanel universe shifts with every click.</p>
+
+            <div class="world-grid">
+                <button class="world-btn active" data-theme="daydream">
+                    🌈 Rainbow City
+                    <span>Bright, playful, and full of bounce.</span>
+                </button>
+                <button class="world-btn" data-theme="neon">
+                    🌃 Neon Arcade
+                    <span>Retro beats and glowing midnight quests.</span>
+                </button>
+                <button class="world-btn" data-theme="forest">
+                    🍃 Mystic Forest
+                    <span>Soft greens, storybook magic, and cute creatures.</span>
+                </button>
+                <button class="world-btn" data-theme="space">
+                    🚀 Cosmic Lab
+                    <span>Galactic fun with rockets, robots, and star friends.</span>
+                </button>
+            </div>
+        </section>
+
+        <section id="shows" class="panel">
+            <h2>Featured shows</h2>
+            <p>A playful lineup of cartoon shorts, adventures, and music videos built for every animation fan.</p>
+
+            <div class="feature-grid">
+                <article class="feature-card">
+                    <div class="icon">🎬</div>
+                    <h3>Turbo Toon Rally</h3>
+                    <p>High-speed cartoon racers, friendly rivalries, and silly power-ups that change the race every minute.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="icon">🎵</div>
+                    <h3>Pop Star Planet</h3>
+                    <p>Musical aliens, dance battles, and catchy tunes made for singalongs in every room.</p>
+                </article>
+
+                <article class="feature-card">
+                    <div class="icon">🪄</div>
+                    <h3>Magic Sketchbook</h3>
+                    <p>Draw spells, paint portals, and watch characters come alive from every doodle.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="characters" class="panel">
+            <h2>Meet the crew</h2>
+            <p>Every character brings a different cartoon flavor — from cheeky mischief to cosmic wisdom.</p>
+
+            <div class="character-grid">
+                <article class="character-card">
+                    <div class="portrait">🧁</div>
+                    <h3>Milo</h3>
+                    <p>A snack-loving prankster who turns every corner into a sugar-powered adventure.</p>
+                </article>
+
+                <article class="character-card">
+                    <div class="portrait">🛡️</div>
+                    <h3>Nova</h3>
+                    <p>Brave space hero and friend to lost robots, always ready with a witty plan.</p>
+                </article>
+
+                <article class="character-card">
+                    <div class="portrait">🌻</div>
+                    <h3>Sunny</h3>
+                    <p>Gentle forest guardian who helps every creature find its happy ending.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="join" class="cta">
+            <h2>Join the Cartoon Vhanel crew</h2>
+            <p>Subscribe for weekly drops, behind-the-scenes art, and surprise animation stickers sent right to your inbox.</p>
+
+            <form class="join-form">
+                <input type="email" placeholder="Enter your email" aria-label="Email address" />
+                <button type="submit">Subscribe</button>
+            </form>
+        </section>
+    </main>
+
+    <div class="modal" id="trailerModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+        <div class="modal-card">
+            <button class="close-btn" id="closeModal" aria-label="Close">×</button>
+            <h3 id="modalTitle">Trailer Preview</h3>
+            <p>Ready for a quick peek? This preview shows the brightest Cartoon Vhanel moments with laughs, music, and animated action.</p>
+            <button class="btn btn-primary" id="closeAction">Close Preview</button>
+        </div>
+    </div>
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const worldButtons = document.querySelectorAll('.world-btn');
+        const trailerModal = document.getElementById('trailerModal');
+        const watchTrailer = document.getElementById('watchTrailer');
+        const closeModal = document.getElementById('closeModal');
+        const closeAction = document.getElementById('closeAction');
+
+        themeToggle.addEventListener('click', () => {
+            body.classList.toggle('theme-night');
+            themeToggle.textContent = body.classList.contains('theme-night') ? 'Day mode' : 'Night mode';
+        });
+
+        worldButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                worldButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                const theme = button.dataset.theme;
+                if (theme === 'neon') {
+                    document.documentElement.style.setProperty('--primary', '#ff45f8');
+                    document.documentElement.style.setProperty('--secondary', '#18d2ff');
+                    document.documentElement.style.setProperty('--accent', '#ffea3b');
+                } else if (theme === 'forest') {
+                    document.documentElement.style.setProperty('--primary', '#56c17d');
+                    document.documentElement.style.setProperty('--secondary', '#3e8cff');
+                    document.documentElement.style.setProperty('--accent', '#ffd35b');
+                } else if (theme === 'space') {
+                    document.documentElement.style.setProperty('--primary', '#8f73ff');
+                    document.documentElement.style.setProperty('--secondary', '#71c8ff');
+                    document.documentElement.style.setProperty('--accent', '#ff7bde');
+                } else {
+                    document.documentElement.style.setProperty('--primary', '#ff6cc9');
+                    document.documentElement.style.setProperty('--secondary', '#4a6dfc');
+                    document.documentElement.style.setProperty('--accent', '#ffd35b');
+                }
+            });
+        });
+
+        const openModal = () => trailerModal.classList.add('open');
+        const closeModalWindow = () => trailerModal.classList.remove('open');
+
+        watchTrailer.addEventListener('click', openModal);
+        closeModal.addEventListener('click', closeModalWindow);
+        closeAction.addEventListener('click', closeModalWindow);
+
+        trailerModal.addEventListener('click', event => {
+            if (event.target === trailerModal) closeModalWindow();
+        });
+    </script>
+</body>
+</html>
